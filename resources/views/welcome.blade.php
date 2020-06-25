@@ -65,7 +65,7 @@
         </style>
     </head>
     <body>
-        <div id="example"></div>
+        <div id="root" data-tenant="{{ $tenant }}"></div>
         <!-- <div id="example" class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

@@ -65836,13 +65836,7 @@ var Switch = function Switch() {
       tenants = _useState2[0],
       setTenants = _useState2[1];
 
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    axios("/api/users").then(function (res) {
-      console.log(res.data);
-    })["catch"](function (err) {
-      console.log(err);
-    });
-  });
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {});
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, tenants.map(function (tenat) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
       value: "NIC"
@@ -65850,51 +65844,82 @@ var Switch = function Switch() {
   }));
 };
 
-var Example = function Example() {
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(null),
+var App = function App(props) {
+  var tenant = props.tenant;
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([]),
       _React$useState2 = _slicedToArray(_React$useState, 2),
-      unit = _React$useState2[0],
-      setUnit = _React$useState2[1];
+      users = _React$useState2[0],
+      setUsers = _React$useState2[1];
+
+  var test = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+
+  var fetchUsers = function fetchUsers() {
+    axios("/api/users?u=".concat(tenant)).then(function (res) {
+      setUsers(res.data);
+    })["catch"](function (err) {
+      console.log(err.response.data);
+    });
+  };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log("Zmieniono jednostkę", unit);
-  }, [unit]);
+    fetchUsers();
+  }, [0]);
 
-  var handleChange = function handleChange(e) {
-    setUnit(JSON.parse(e.target.value));
+  var handleReload = function handleReload() {
+    fetchUsers();
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container mt-5"
+    className: "container-fluid"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row justify-content-center"
+    className: "row mt-5 justify-content-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-8"
+    className: "col col-12 col-md-8 col-lg-6"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-header"
-  }, "Multi Tenant Switcher"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-    className: "px-5 py-3",
-    onSubmit: function onSubmit() {
-      return false;
+  }, "Multi Tenant Users"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "p-3"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+    className: "table table-bordered table-hover mb-0"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Imi\u0119"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nazwisko"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    className: "w-100 text-right"
+  }, "Identyfikator"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, users.map(function (user) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      key: user.id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.surname), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "w-100 text-right"
+    }, user.u_card));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "text-center mt-3"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-primary",
+    onClick: function onClick() {
+      return handleReload();
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-    className: "form-control",
-    onChange: function onChange(e) {
-      return handleChange(e);
-    }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-    value: null,
-    disabled: ""
-  }, "Wybierz jednostk\u0119"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Switch, null)))))));
-};
+  }, "Reload")))))));
+}; // <form className="px-5 py-3" onSubmit={ () => false }>
+//     <select className="form-control" onChange={ (e) => handleChange(e) }>
+//         <option value={ null } disabled="">Wybierz jednostkę</option>
+//         <option value="sub1">Sub1</option>
+//         <option value="sub2">Sub2</option>
+//         <option value="sub3">Sub3</option>
+//         <Switch />
+//     </select>
+// </form>
 
-if (document.getElementById('example')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null), document.getElementById('example'));
+
+var root = document.getElementById('root');
+
+if (root !== undefined) {
+  var props = Object.assign({}, root.dataset);
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, props), root);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Example);
+/* harmony default export */ __webpack_exports__["default"] = (App);
 
 /***/ }),
 

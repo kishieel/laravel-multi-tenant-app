@@ -25,7 +25,7 @@ Prepare databases:
 And add tables. You can use this:
 ```
 php artisan migrate --database=system						
-php artisan migrate --database=tenant --path=tenant
+php artisan migrate --database=tenant --path=/database/migrations/tenant
 ```
 After it you can run app by:
 ```
@@ -35,3 +35,4 @@ If you want to change something in React scripts run this:
 ```
 npm run watch
 ```
+Visit one from subdomains and look how it works :3

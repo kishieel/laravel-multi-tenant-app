@@ -5,11 +5,7 @@ const Switch = () => {
     const [ tenants, setTenants ] = useState( [] )
 
     useEffect(() => {
-        axios("/api/users").then((res) => {
-            console.log(res.data)
-        }).catch((err) => {
-            console.log(err)
-        })
+
     })
 
 
@@ -22,30 +18,64 @@ const Switch = () => {
     )
 }
 
-const Example = () => {
-    const [ unit, setUnit ] = React.useState( null )
+const App = ( props ) => {
+    const { tenant } = props
+    const [ users, setUsers ] = React.useState( [] )
+    const test = React.createRef();
+
+    const fetchUsers = () => {
+        axios(`/api/users?u=${ tenant }`).then((res) => {
+            setUsers( res.data )
+        }).catch((err) => {
+            console.log( err.response.data )
+        })
+    }
 
     useEffect(() => {
-        console.log("Zmieniono jednostkę", unit)
-    }, [ unit ])
+        fetchUsers();
+    }, [0])
 
-    const handleChange = (e) => {
-        setUnit( JSON.parse( e.target.value ) )
+    const handleReload = () => {
+        fetchUsers()
     }
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
+        <div className="container-fluid">
+            <div className="row mt-5 justify-content-center">
+                <div className="col col-12 col-md-8 col-lg-6">
                     <div className="card">
-                        <div className="card-header">Multi Tenant Switcher</div>
+                        <div className="card-header">Multi Tenant Users</div>
 
-                        <form className="px-5 py-3" onSubmit={ () => false }>
-                            <select className="form-control" onChange={ (e) => handleChange(e) }>
-                                <option value={ null } disabled="">Wybierz jednostkę</option>
-                                <Switch />
-                            </select>
-                        </form>
+                        <div className="p-3">
+                            <table className="table table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Imię</th>
+                                        <th>Nazwisko</th>
+                                        <th className="w-100 text-right">Identyfikator</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    { users.map( user => (
+                                        <tr key={ user.id }>
+                                            <td>{ user.name }</td>
+                                            <td>{ user.surname }</td>
+                                            <td className="w-100 text-right">{ user.u_card }</td>
+                                        </tr>
+                                    )) }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div className="text-center mt-3">
+                                <button type="button" className="btn btn-primary" onClick={ () => handleReload() }>Reload</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,8 +83,20 @@ const Example = () => {
     )
 }
 
-if (document.getElementById('example')) {
-    ReactDOM.render(<Example />, document.getElementById('example'))
+// <form className="px-5 py-3" onSubmit={ () => false }>
+//     <select className="form-control" onChange={ (e) => handleChange(e) }>
+//         <option value={ null } disabled="">Wybierz jednostkę</option>
+//         <option value="sub1">Sub1</option>
+//         <option value="sub2">Sub2</option>
+//         <option value="sub3">Sub3</option>
+//         <Switch />
+//     </select>
+// </form>
+
+const root = document.getElementById('root');
+if( root !== undefined ) {
+    const props = Object.assign({}, root.dataset)
+    ReactDOM.render(<App { ...props }/>, root)
 }
 
-export default Example;
+export default App;

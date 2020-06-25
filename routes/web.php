@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Route::group(['domain' => '{tenant}.local.com'], function () {
+    Route::get('/', function () {
+        return view('welcome', ["tenant" => request()->tenant]);
+    });
 });

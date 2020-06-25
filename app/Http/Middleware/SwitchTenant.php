@@ -11,7 +11,7 @@ class SwitchTenant
 {
     public function handle($request, Closure $next)
     {
-        if( $tenant = Tenant::where('subdomain', $request->subdomain )->first() ) {
+        if( $tenant = Tenant::where('subdomain', $request->u )->first() ) {
             DB::disconnect('tenant');
             Config::set('database.connections.tenant.database', $tenant->db_name );
             DB::reconnect('tenant');
